@@ -1,10 +1,5 @@
 package com.jitterted.ebp.blackjack.domain;
 
-import com.jitterted.ebp.blackjack.adapter.in.console.ConsoleCard;
-import com.jitterted.ebp.blackjack.adapter.in.console.ConsoleHand;
-
-import static org.fusesource.jansi.Ansi.ansi;
-
 public class Game {
 
     private final Deck deck;
@@ -52,30 +47,23 @@ public class Game {
         }
     }
 
-    public void displayGameState() {
-        System.out.print(ansi().eraseScreen().cursor(1, 1));
-        System.out.println("Dealer has: ");
-        System.out.println(ConsoleHand.displayFirstCard(dealerHand)); // first card is Face Up
-
-        // second card is the hole card, which is hidden
-        ConsoleCard.displayBackOfCard();
-
-        System.out.println();
-        System.out.println("Player has: ");
-        System.out.println(ConsoleHand.cardsAsString(playerHand));
-        System.out.println(" (" + playerHand.value() + ")");
+    // QUERY METHOD RULE
+    // ? -> Snapshot (point-in-time)
+    // ? -> PREVENT illegal change to state of Game
+    // Need: Hand's value, Hand's list of cards, and Hand's "face up" card
+    // 0. Hand - NO - it's mutable, and is not a snapshot
+    // 1. Copy/Clone - maybe - Is a snapshot, Prevent Illegal Access, but is Misleading
+    // 2. Limited Interface that Hand implements: only expose needed info "ReadOnlyHand"
+    //                  Solves illegal change, but is not a snapshot
+    // 3. DTO ("HandView") - data transfer object - NO - not allowed in Domain
+    // 3a. VALUE OBJECT ("HandView") - belongs in the domain
+    //              Created by Game (used only thru Game) or Hand (used elsewhere)
+    public Hand playerHand() {
+        return playerHand;
     }
 
-    public void displayFinalGameState() {
-        System.out.print(ansi().eraseScreen().cursor(1, 1));
-        System.out.println("Dealer has: ");
-        System.out.println(ConsoleHand.cardsAsString(dealerHand));
-        System.out.println(" (" + dealerHand.value() + ")");
-
-        System.out.println();
-        System.out.println("Player has: ");
-        System.out.println(ConsoleHand.cardsAsString(playerHand));
-        System.out.println(" (" + playerHand.value() + ")");
+    public Hand dealerHand() {
+        return dealerHand;
     }
 
 
