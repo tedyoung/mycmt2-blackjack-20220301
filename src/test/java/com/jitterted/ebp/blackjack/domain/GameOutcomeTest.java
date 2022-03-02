@@ -29,4 +29,17 @@ class GameOutcomeTest {
                 .isEqualTo(GameOutcome.PLAYER_BEATS_DEALER);
     }
 
+    @Test
+    public void playerDealtBlackjackUponInitialDealThenWinsBlackjack() throws Exception {
+        Game game = new Game(new StubDeck(Rank.ACE, Rank.NINE,
+                                          Rank.JACK, Rank.EIGHT));
+
+        game.initialDeal();
+
+        assertThat(game.determineOutcome())
+                .isEqualTo(GameOutcome.PLAYER_WINS_BLACKJACK);
+        assertThat(game.isPlayerDone())
+                .isTrue();
+    }
+
 }
