@@ -47,6 +47,7 @@ public class Hand {
     }
 
     public void drawFrom(Deck deck) {
+        // "invariant": should not be allowed to draw card if isBusted = true
         cards.add(deck.draw());
     }
 
