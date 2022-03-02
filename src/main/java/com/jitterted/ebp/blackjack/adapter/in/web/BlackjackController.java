@@ -28,4 +28,10 @@ public class BlackjackController {
         model.addAttribute("gameView", GameView.of(game));
         return "blackjack";
     }
+
+    @PostMapping("/hit")
+    public String hitCommand() {
+        return "redirect:/";
+    }
+
 }
