@@ -76,8 +76,7 @@ class BlackjackControllerTest {
 
         String redirectPage = blackjackController.hitCommand();
 
-        assertThat(redirectPage)
-                .isEqualTo("redirect:/done");
+        assertRedirectedToDonePage(redirectPage);
     }
 
     @Test
@@ -106,8 +105,7 @@ class BlackjackControllerTest {
 
         String redirectPage = blackjackController.standCommand();
 
-        assertThat(redirectPage)
-                .isEqualTo("redirect:/done");
+        assertRedirectedToDonePage(redirectPage);
         assertThat(game.isPlayerDone())
                 .isTrue();
     }
@@ -128,5 +126,27 @@ class BlackjackControllerTest {
                 .hasSize(3);
     }
 
+    @Test
+    public void playerDealtBlackjackRedirectsToDone() throws Exception {
+        Game game = new Game(StubDeck.playerDealtBlackjack());
+        BlackjackController blackjackController = new BlackjackController(game);
+
+        String redirectPage = blackjackController.startGame();
+
+        assertRedirectedToDonePage(redirectPage);
+    }
+
+    private void assertRedirectedToDonePage(String redirectPage) {
+        assertThat(redirectPage)
+                .isEqualTo("redirect:/done");
+    }
+
+/* Kent Beck's 4 Rules of Simple Design
+    1. Passes the tests
+    2. Reveals intention
+    3. No duplication - or similarity that can be eliminated?
+        Why? Why are they the same/similar?
+    4. Fewest elements - are there unnecessary fields, methods, constants, etc.?
+*/
 
 }
